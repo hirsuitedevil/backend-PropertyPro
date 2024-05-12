@@ -105,16 +105,16 @@ authController.post('/forgot-password', async(req,res) => {
         var transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
-            user: 'noreply.liberoom@gmail.com',
-            pass: 'xnvtgdfasythgjhm'
+            user: `${USER_EMAIL}`,
+            pass: `${EMAIL_PASSKEY}`
           }
         });
 
         var mailOptions = {
-          from: 'noreply.liberoom@gmail.com',
+          from: `${USER_EMAIL}`,
           to: req.body.email,
-          subject: 'Reset Password Link',
-          text: `http://localhost:3000/resetpassword/${user._id}/${token}`
+          subject: "Reset Password Link",
+          text: `${CLIENT_URL}/resetpassword/${user._id}/${token}`,
         };
 
         transporter.sendMail(mailOptions, function(error, info) {
