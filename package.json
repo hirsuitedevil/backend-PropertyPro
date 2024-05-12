@@ -21,6 +21,7 @@
     "nodemailer": "^6.9.4",
     "nodemon": "^2.0.22",
     "passport": "^0.6.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "vercel": "^34.1.11"
   }
 }
