@@ -10,7 +10,6 @@ authController.post('/googlesign', async (req, res) => {
   try {
     const { email, name, picture } = req.body;
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       await User.findByIdAndUpdate(existingUser._id, { isGoogleSignedIn: true });
       const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {expiresIn: '4h' });
@@ -21,6 +20,7 @@ authController.post('/googlesign', async (req, res) => {
       return res.status(201).json({ user: newUser, token });
     }
   } catch (error) {
+    console.error("Error creating user:", error);
     return res.status(500).json(error.message);
   }
 });
@@ -173,4 +173,17 @@ authController.get('/profileImages', async (req, res) => {
   }
 });
 
+authController.get('/getUserbyId/:id', async (req,res)=>{
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if(!user){
+      throw new Error('User not Found!');
+    }
+    res.status(200).json({user});
+  } catch (error) {
+    console.error("Error retrieving user: ", error);
+    res.status(404).json({ error: "User not found" });
+  }
+});
 module.exports = authController;
