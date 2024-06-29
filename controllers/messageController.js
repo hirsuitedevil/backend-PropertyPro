@@ -25,8 +25,10 @@ messageController.post('/send/:id',verifyToken,async (req,res) =>{
         await Promise.all([conversation.save()],newMessage.save());
         
         const receiverSocketId = getReceiverSocketId(receiverId);
-        if(receiverSocketId){
+        const senderSocketId = getReceiverSocketId(senderId);
+        if (receiverSocketId && senderSocketId) {
           io.to(receiverSocketId).emit("newMessage", newMessage);
+          io.to(senderSocketId).emit("newMessage", newMessage);
         }
 
         res.status(201).json({Message: "Message sent successfully"});
