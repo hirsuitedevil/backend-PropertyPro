@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const conversationController = require("./controllers/conversationController")
 const messageController = require("./controllers/messageController");
+const feedbackController = require('./controllers/feedbackController')
 dotenv.config();
 // routes and middlewares
 mongoose.set('strictQuery', false)
@@ -27,6 +28,7 @@ app.use("/auth", authController);
 app.use("/property", propertyController);
 app.use("/messages",messageController);
 app.use("/conversations",conversationController);
+app.use("/feedback", feedbackController);
 //starting server
 
 //npm run start
