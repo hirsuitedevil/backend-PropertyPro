@@ -30,4 +30,5 @@ app.use("/conversations",conversationController);
 //starting server
 
 //npm run start
+console.log(process.env.PORT);
 server.listen(process.env.PORT, ()=> console.log('Server has been started '))
