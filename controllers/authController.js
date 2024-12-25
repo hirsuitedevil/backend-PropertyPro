@@ -68,7 +68,8 @@ authController.post("/register", async (req, res) => {
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "4h",
     });
-    await cacheSet(`user:${req.body.email}:${newUser._id}`, newUser, 3600);
+    console.log(`user:${newUser.email}:${newUser._id}`);
+    await cacheSet(`user:${newUser.email}:${newUser._id}`, newUser, 3600);
     return res.status(201).json({
       user: userResponse,
       token,
@@ -99,6 +100,7 @@ authController.post("/login", async (req, res) => {
   try {
     const email = req.body.email;
     const pattern = `user:${email}:*`;
+    console.log(pattern);
     const cachedData = await cacheFetch(pattern);
     let user;
     if (cachedData) {

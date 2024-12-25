@@ -7,13 +7,9 @@ const redis = new Redis({
 
 const cacheFetch = async (keyPattern) => {
   try {
-    let cursor = "0";
-    let scanResult = await redis.scan(cursor, { MATCH: keyPattern });
-    let keys = scanResult[1];
-
-    if (keys.length > 0) {
-      const cacheKey = keys[0];
-      const cachedData = await redis.get(cacheKey);
+    let scanResult = await redis.keys(keyPattern);
+    if (scanResult.length>0) {
+      const cachedData = await redis.get(scanResult[0]);
       if (cachedData) {
         return cachedData;
       }
@@ -34,12 +30,15 @@ const cacheSet = async (key, data, ttl) => {
       if(ttl){
         await redis.expire(key, ttl, "NX");
       }
+      console.log(`Data cached successfully for key: ${key}`);
     }else{
       if(ttl){
         await redis.expire(`user:${cacheData.email}:${cacheData._id}`, ttl, "GT");
+        console.log(
+          `Data cached successfully for key: user:${cacheData.email}:${cacheData._id}`
+        );
       }
     }
-    console.log(`Data cached successfully for key: ${key}`);
     return true;
   } catch (error) {
     console.error("Cache Set Error:", error);
